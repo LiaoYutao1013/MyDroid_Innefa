@@ -1,0 +1,29 @@
+﻿# Python 虚拟环境
+.venv/
+venv/
+
+# Python 缓存与测试缓存
+__pycache__/
+*.pyc
+*.pyc.*
+.pytest_cache/
+pytest-cache-files-*/
+
+# ROS 2 / colcon 构建产物
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+
+# 编辑器配置
+.vscode/
+.idea/
+
+# 本地临时文件与测试输出
+test_output.mp4
+*.whl
+
+# RKNN / ONNX 转换中间产物
+check0_base_optimize.onnx
+check1_fold_constant.onnx
+check2_correct_ops.onnx
+check3_fuse_ops.onnx
