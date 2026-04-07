@@ -1,0 +1,127 @@
+[1.283s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build', '--symlink-install']
+[1.284s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=True, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=4, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0xffffb568ae90>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0xffffb568a980>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0xffffb568a980>>)
+[2.762s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[2.763s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[2.764s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[2.765s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[2.765s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[2.766s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[2.766s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/radxa/MyDroid/ros2_ws'
+[2.768s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[2.769s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[2.770s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[2.771s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[2.772s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[2.773s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[2.773s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[2.774s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[2.775s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[2.894s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[2.895s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[2.895s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[2.896s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[2.897s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[2.898s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[2.900s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[2.901s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[2.903s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[2.904s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[2.905s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[2.907s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[2.908s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[2.909s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[2.910s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ignore', 'ignore_ament_install']
+[2.912s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore'
+[2.912s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore_ament_install'
+[2.913s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_pkg']
+[2.914s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_pkg'
+[2.915s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_meta']
+[2.916s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_meta'
+[2.916s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ros']
+[2.917s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ros'
+[2.918s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['cmake', 'python']
+[2.919s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'cmake'
+[2.919s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python'
+[2.920s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['python_setup_py']
+[2.921s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python_setup_py'
+[2.922s] Level 1:colcon.colcon_core.package_identification:_identify(src/visual_following_car) by extensions ['ignore', 'ignore_ament_install']
+[2.923s] Level 1:colcon.colcon_core.package_identification:_identify(src/visual_following_car) by extension 'ignore'
+[2.925s] Level 1:colcon.colcon_core.package_identification:_identify(src/visual_following_car) by extension 'ignore_ament_install'
+[2.926s] Level 1:colcon.colcon_core.package_identification:_identify(src/visual_following_car) by extensions ['colcon_pkg']
+[2.926s] Level 1:colcon.colcon_core.package_identification:_identify(src/visual_following_car) by extension 'colcon_pkg'
+[2.927s] Level 1:colcon.colcon_core.package_identification:_identify(src/visual_following_car) by extensions ['colcon_meta']
+[2.928s] Level 1:colcon.colcon_core.package_identification:_identify(src/visual_following_car) by extension 'colcon_meta'
+[2.928s] Level 1:colcon.colcon_core.package_identification:_identify(src/visual_following_car) by extensions ['ros']
+[2.929s] Level 1:colcon.colcon_core.package_identification:_identify(src/visual_following_car) by extension 'ros'
+[2.953s] DEBUG:colcon.colcon_core.package_identification:Package 'src/visual_following_car' with type 'ros.ament_python' and name 'visual_following_car'
+[2.954s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[2.954s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[2.955s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[2.955s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[2.956s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[3.125s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[3.126s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[3.150s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 273 installed packages in /opt/ros/humble
+[3.163s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[3.668s] Level 5:colcon.colcon_core.verb:set package 'visual_following_car' build argument 'cmake_args' from command line to 'None'
+[3.669s] Level 5:colcon.colcon_core.verb:set package 'visual_following_car' build argument 'cmake_target' from command line to 'None'
+[3.669s] Level 5:colcon.colcon_core.verb:set package 'visual_following_car' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[3.670s] Level 5:colcon.colcon_core.verb:set package 'visual_following_car' build argument 'cmake_clean_cache' from command line to 'False'
+[3.670s] Level 5:colcon.colcon_core.verb:set package 'visual_following_car' build argument 'cmake_clean_first' from command line to 'False'
+[3.671s] Level 5:colcon.colcon_core.verb:set package 'visual_following_car' build argument 'cmake_force_configure' from command line to 'False'
+[3.671s] Level 5:colcon.colcon_core.verb:set package 'visual_following_car' build argument 'ament_cmake_args' from command line to 'None'
+[3.672s] Level 5:colcon.colcon_core.verb:set package 'visual_following_car' build argument 'catkin_cmake_args' from command line to 'None'
+[3.672s] Level 5:colcon.colcon_core.verb:set package 'visual_following_car' build argument 'catkin_skip_building_tests' from command line to 'False'
+[3.673s] DEBUG:colcon.colcon_core.verb:Building package 'visual_following_car' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/radxa/MyDroid/ros2_ws/build/visual_following_car', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/radxa/MyDroid/ros2_ws/install/visual_following_car', 'merge_install': False, 'path': '/home/radxa/MyDroid/ros2_ws/src/visual_following_car', 'symlink_install': True, 'test_result_base': None}
+[3.675s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[3.683s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[3.686s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/radxa/MyDroid/ros2_ws/src/visual_following_car' with build type 'ament_python'
+[3.690s] Level 1:colcon.colcon_core.shell:create_environment_hook('visual_following_car', 'ament_prefix_path')
+[3.715s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[3.717s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/radxa/MyDroid/ros2_ws/install/visual_following_car/share/visual_following_car/hook/ament_prefix_path.ps1'
+[3.725s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/radxa/MyDroid/ros2_ws/install/visual_following_car/share/visual_following_car/hook/ament_prefix_path.dsv'
+[3.731s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/radxa/MyDroid/ros2_ws/install/visual_following_car/share/visual_following_car/hook/ament_prefix_path.sh'
+[3.739s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[3.740s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[6.029s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/radxa/MyDroid/ros2_ws/src/visual_following_car'
+[6.031s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[6.032s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[8.985s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/radxa/MyDroid/ros2_ws/build/visual_following_car': PYTHONPATH=/home/radxa/MyDroid/ros2_ws/build/visual_following_car/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib/python3.10/site-packages:${PYTHONPATH} VIRTUAL_ENV_PROMPT=(.venv) /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/radxa/MyDroid/ros2_ws/build/visual_following_car/build --no-deps symlink_data
+[13.133s] Level 1:colcon.colcon_core.shell:create_environment_hook('visual_following_car', 'pythonpath_develop')
+[13.136s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/radxa/MyDroid/ros2_ws/build/visual_following_car/share/visual_following_car/hook/pythonpath_develop.ps1'
+[13.139s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/radxa/MyDroid/ros2_ws/build/visual_following_car' returned '0': PYTHONPATH=/home/radxa/MyDroid/ros2_ws/build/visual_following_car/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib/python3.10/site-packages:${PYTHONPATH} VIRTUAL_ENV_PROMPT=(.venv) /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/radxa/MyDroid/ros2_ws/build/visual_following_car/build --no-deps symlink_data
+[13.145s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/radxa/MyDroid/ros2_ws/build/visual_following_car/share/visual_following_car/hook/pythonpath_develop.dsv'
+[13.149s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/radxa/MyDroid/ros2_ws/build/visual_following_car/share/visual_following_car/hook/pythonpath_develop.sh'
+[13.172s] Level 1:colcon.colcon_core.environment:checking '/home/radxa/MyDroid/ros2_ws/install/visual_following_car' for CMake module files
+[13.176s] Level 1:colcon.colcon_core.environment:checking '/home/radxa/MyDroid/ros2_ws/install/visual_following_car' for CMake config files
+[13.181s] Level 1:colcon.colcon_core.environment:checking '/home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib'
+[13.183s] Level 1:colcon.colcon_core.environment:checking '/home/radxa/MyDroid/ros2_ws/install/visual_following_car/bin'
+[13.184s] Level 1:colcon.colcon_core.environment:checking '/home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib/pkgconfig/visual_following_car.pc'
+[13.186s] Level 1:colcon.colcon_core.environment:checking '/home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib/python3.10/site-packages'
+[13.187s] Level 1:colcon.colcon_core.shell:create_environment_hook('visual_following_car', 'pythonpath')
+[13.189s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/radxa/MyDroid/ros2_ws/install/visual_following_car/share/visual_following_car/hook/pythonpath.ps1'
+[13.193s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/radxa/MyDroid/ros2_ws/install/visual_following_car/share/visual_following_car/hook/pythonpath.dsv'
+[13.197s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/radxa/MyDroid/ros2_ws/install/visual_following_car/share/visual_following_car/hook/pythonpath.sh'
+[13.205s] Level 1:colcon.colcon_core.environment:checking '/home/radxa/MyDroid/ros2_ws/install/visual_following_car/bin'
+[13.206s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(visual_following_car)
+[13.209s] INFO:colcon.colcon_core.shell:Creating package script '/home/radxa/MyDroid/ros2_ws/install/visual_following_car/share/visual_following_car/package.ps1'
+[13.220s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/radxa/MyDroid/ros2_ws/install/visual_following_car/share/visual_following_car/package.dsv'
+[13.225s] INFO:colcon.colcon_core.shell:Creating package script '/home/radxa/MyDroid/ros2_ws/install/visual_following_car/share/visual_following_car/package.sh'
+[13.232s] INFO:colcon.colcon_core.shell:Creating package script '/home/radxa/MyDroid/ros2_ws/install/visual_following_car/share/visual_following_car/package.bash'
+[13.238s] INFO:colcon.colcon_core.shell:Creating package script '/home/radxa/MyDroid/ros2_ws/install/visual_following_car/share/visual_following_car/package.zsh'
+[13.245s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/radxa/MyDroid/ros2_ws/install/visual_following_car/share/colcon-core/packages/visual_following_car)
+[13.249s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[13.251s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[13.252s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[13.254s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[13.258s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[13.260s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/radxa/MyDroid/ros2_ws/install/local_setup.ps1'
+[13.269s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/radxa/MyDroid/ros2_ws/install/_local_setup_util_ps1.py'
+[13.282s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/radxa/MyDroid/ros2_ws/install/setup.ps1'
+[13.291s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/radxa/MyDroid/ros2_ws/install/local_setup.sh'
+[13.297s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/radxa/MyDroid/ros2_ws/install/_local_setup_util_sh.py'
+[13.303s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/radxa/MyDroid/ros2_ws/install/setup.sh'
+[13.312s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/radxa/MyDroid/ros2_ws/install/local_setup.bash'
+[13.317s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/radxa/MyDroid/ros2_ws/install/setup.bash'
+[13.325s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/radxa/MyDroid/ros2_ws/install/local_setup.zsh'
+[13.332s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/radxa/MyDroid/ros2_ws/install/setup.zsh'

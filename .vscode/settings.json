@@ -56,6 +56,5 @@
   "C_Cpp_Runner.showCompilationTime": false,
   "C_Cpp_Runner.useLinkTimeOptimization": false,
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
-  "python.analysis.autoImportCompletions": true,
-  "cmake.sourceDirectory": "E:/Mech Engineering/MyDroid/ros2_ws/src/visual_following_car"
+  "python.analysis.autoImportCompletions": true
 }

@@ -1,0 +1,108 @@
+# ==============================
+# visual_follower.yaml
+# ==============================
+# 这个文件用于“纯视觉测试模式”。
+# 典型用途：
+# 1. 只有 ROCK 3B + USB 摄像头，还没有 STM32 和底盘时。
+# 2. 仅验证 YOLO 检测、目标选择和视觉跟随控制逻辑是否正确。
+# 3. 配合 mock_serial_bridge 查看虚拟底盘速度与云台角度输出。
+
+
+yolo_detection_node:
+  ros__parameters:
+    # 纯视觉测试模式下，YOLO 不直接打开本地摄像头，
+    # 而是从 ROS 图像话题中读取图像。
+    camera_test_mode: true
+
+    # 图像输入话题。
+    image_topic: /image_raw
+
+    # 即使在 camera_test_mode 下，这个字段仍保留，便于必要时切回直连摄像头模式。
+    camera_device: /dev/video0
+
+    # 摄像头图像尺寸。
+    frame_width: 640
+    frame_height: 480
+
+    # 摄像头期望帧率。
+    camera_fps: 30.0
+
+    # YOLO 推理频率。
+    inference_rate_hz: 10.0
+
+    # 摄像头重试周期。
+    camera_retry_sec: 2.0
+
+    # 模型权重。
+    model_path: yolov8n.pt
+
+    # YOLO 输入尺寸。
+    input_size: 416
+
+    # 推理阈值。
+    confidence_threshold: 0.45
+    iou_threshold: 0.45
+
+    # 推理设备。
+    device: cpu
+
+    # 只保留 person 类别。
+    target_class_names: [person]
+
+    # 单目距离粗估用的人体高度。
+    target_real_height_m: 1.70
+
+    # 单目距离粗估用的摄像头焦距。
+    camera_focal_length_px: 650.0
+
+    # 无目标时发布空数组。
+    publish_no_target: true
+
+visual_follower_node:
+  ros__parameters:
+    # 开启相机测试模式：不向真实硬件控制话题输出，而是发布虚拟结果。
+    camera_test_mode: true
+
+    # 终端日志输出的最小间隔。
+    camera_test_log_interval_sec: 1.0
+
+    # 控制频率。
+    control_rate_hz: 20.0
+
+    # 目标超时时间。
+    target_timeout_sec: 0.50
+
+    # 目标期望距离。
+    target_distance_m: 1.50
+
+    # 跟随控制参数。
+    distance_kp: 0.80
+    strafe_kp: 1.10
+    omega_from_pan_kp: 1.30
+
+    # 最大允许速度。
+    max_linear_x_mps: 0.80
+    max_linear_y_mps: 0.60
+    max_angular_z_radps: 1.20
+
+    # 加速度限制。
+    max_linear_accel_mps2: 1.20
+    max_lateral_accel_mps2: 1.20
+    max_angular_accel_radps2: 2.00
+
+    # Pan 云台参数。
+    pan_min_deg: 0.0
+    pan_max_deg: 180.0
+    recenter_rate_deg_s: 50.0
+    gimbal.pan_enabled: true
+    gimbal.pan_neutral: 90.0
+    gimbal.pan_kp: 0.8
+    gimbal.pan_max_angle: 160.0
+
+mock_serial_bridge:
+  ros__parameters:
+    # 纯视觉模式下，mock 串口桥只负责打印日志。
+    camera_test_mode: true
+
+    # 打印日志的最小时间间隔。
+    log_interval_sec: 0.5

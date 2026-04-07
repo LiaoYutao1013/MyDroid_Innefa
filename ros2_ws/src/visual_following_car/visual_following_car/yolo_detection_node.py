@@ -1,21 +1,15 @@
 #!/usr/bin/env python3
-"""YOLOv8 目标检测节点。
+"""RetinaFace RKNN + 肤色检测混合目标检测节点。
 
-文件职责：
-1. 从 USB 摄像头或 ROS 图像话题读取图像。
-2. 使用 ultralytics YOLOv8 模型进行目标检测。
-3. 从多目标中筛选“最适合跟随”的目标。
-4. 发布目标框中心、尺寸、置信度和粗略距离估计。
-
-注意：
-- 本节点只负责“感知”，不负责底盘或云台控制。
-- 视觉跟随逻辑由 `visual_follower_node.py` 完成。
+自动选择检测方式：
+1. 优先尝试 RKNN RetinaFace（如果可用）- 更精准
+2. 降级到肤色检测（如果 RKNN 不可用）- 无需额外依赖
 """
 
 from __future__ import annotations
 
 from typing import Optional, Union
-
+import numpy as np
 import cv2
 import rclpy
 from rclpy.node import Node
@@ -28,27 +22,19 @@ except ImportError:
     CvBridge = None
 
 try:
-    from ultralytics import YOLO
-except ImportError as exc:  # pragma: no cover - runtime dependency on target machine
-    YOLO = None
-    IMPORT_ERROR = exc
-else:
-    IMPORT_ERROR = None
+    from rknn.api import RKNN
+    RKNN_AVAILABLE = True
+except ImportError:
+    RKNN_AVAILABLE = False
 
 
 class YoloDetectionNode(Node):
-    """采集图像、执行 YOLO 推理并发布最佳目标框。"""
+    """混合检测节点：RKNN RetinaFace + 肤色检测降级。"""
 
     def __init__(self) -> None:
-        """初始化模型、图像输入源、参数和定时器。"""
         super().__init__('yolo_detection_node')
 
-        if YOLO is None:
-            raise RuntimeError(
-                'ultralytics is not installed. Install requirements.txt before running.'
-            ) from IMPORT_ERROR
-
-        # 参数区：既支持直接读摄像头，也支持 camera_test_mode 下订阅图像话题。
+        # 参数声明
         self.declare_parameters(
             namespace='',
             parameters=[
@@ -60,20 +46,20 @@ class YoloDetectionNode(Node):
                 ('camera_fps', 30.0),
                 ('inference_rate_hz', 10.0),
                 ('camera_retry_sec', 2.0),
-                ('model_path', 'yolov8n.pt'),
-                ('input_size', 416),
-                ('confidence_threshold', 0.45),
-                ('iou_threshold', 0.45),
-                ('device', 'cpu'),
-                ('target_class_names', ['person']),
-                ('target_real_height_m', 1.70),
-                ('camera_focal_length_px', 650.0),
+                ('model_path', 'RetinaFace_mobile320.rknn'),
+                ('input_size', 320),
+                ('confidence_threshold', 0.5),
+                ('iou_threshold', 0.4),
+                ('device', 'rknn'),
+                ('target_class_names', ['face']),
+                ('target_real_height_m', 0.2),
+                ('camera_focal_length_px', 600.0),
                 ('publish_no_target', True),
                 ('log_interval_sec', 1.0),
             ],
         )
 
-        # 读取参数。
+        # 读取参数
         self.camera_device = str(self.get_parameter('camera_device').value)
         self.camera_test_mode = bool(self.get_parameter('camera_test_mode').value)
         self.image_topic = str(self.get_parameter('image_topic').value)
@@ -85,34 +71,41 @@ class YoloDetectionNode(Node):
         self.model_path = str(self.get_parameter('model_path').value)
         self.input_size = int(self.get_parameter('input_size').value)
         self.confidence_threshold = float(self.get_parameter('confidence_threshold').value)
-        self.iou_threshold = float(self.get_parameter('iou_threshold').value)
-        self.device = str(self.get_parameter('device').value)
-        self.target_class_names = set(self.get_parameter('target_class_names').value)
         self.target_real_height_m = float(self.get_parameter('target_real_height_m').value)
         self.camera_focal_length_px = float(self.get_parameter('camera_focal_length_px').value)
         self.publish_no_target = bool(self.get_parameter('publish_no_target').value)
         self.log_interval_sec = float(self.get_parameter('log_interval_sec').value)
 
+        # 发布器
         self.target_pub = self.create_publisher(Float32MultiArray, 'vision/target_bbox', 10)
 
-        # 加载 YOLO 模型。
-        self.model = YOLO(self.model_path)
-
-        # 图像输入相关状态。
+        # 摄像头和模型
         self.cap: Optional[cv2.VideoCapture] = None
         self.bridge = CvBridge() if CvBridge is not None else None
         self.latest_frame = None
         self.last_retry_time = self.get_clock().now()
-        self.last_inference_time = self.get_clock().now()
         self.last_log_time = self.get_clock().now()
         self.image_sub = None
 
+        # 加载 RKNN 模型
+        self.rknn = None
+        self.use_rknn = False
+        
+        if RKNN_AVAILABLE:
+            try:
+                self._load_rknn_model()
+                self.use_rknn = True
+                self.get_logger().info(f'✓ RKNN 模型加载成功: {self.model_path}')
+            except Exception as e:
+                self.get_logger().warn(f'RKNN 模型加载失败: {e}，使用肤色检测')
+        else:
+            # 尝试检查 RKNN 工具包
+            self.get_logger().info('RKNN 工具包未找到，使用肤色检测')
+
+        # 图像输入
         if self.camera_test_mode:
-            # 在 camera_test_mode 下，不直接打开摄像头，而是等待外部图像话题输入。
             if self.bridge is None:
-                raise RuntimeError(
-                    'cv_bridge is not installed. Install ros-humble-cv-bridge before camera test mode.'
-                )
+                raise RuntimeError('cv_bridge not installed')
             self.image_sub = self.create_subscription(Image, self.image_topic, self.image_callback, 10)
         else:
             self._open_camera()
@@ -120,184 +113,156 @@ class YoloDetectionNode(Node):
         timer_period = 1.0 / max(self.inference_rate_hz, 1.0)
         self.timer = self.create_timer(timer_period, self.timer_callback)
 
-        self.get_logger().info(
-            f'YOLO detection node ready. camera_test_mode={self.camera_test_mode} '
-            f'camera={self.camera_device} image_topic={self.image_topic} '
-            f'model={self.model_path} device={self.device} '
-            f'conf={self.confidence_threshold} iou={self.iou_threshold}'
-        )
+        mode = '✓ RKNN RetinaFace' if self.use_rknn else '肤色检测'
+        self.get_logger().info(f'detection node ready [{mode}]')
+
+    def _load_rknn_model(self) -> None:
+        """加载 RKNN 模型。"""
+        from pathlib import Path
+        
+        model_path = Path(self.model_path)
+        
+        # 搜索模型
+        search_paths = [
+            model_path,
+            Path('/home/radxa/MyDroid/ros2_ws/src/visual_following_car/models') / model_path.name,
+            Path('/home/radxa/MyDroid') / model_path.name,
+        ]
+        
+        actual_path = None
+        for p in search_paths:
+            if p.exists():
+                actual_path = p
+                break
+        
+        if not actual_path:
+            raise FileNotFoundError(f'Model not found: {self.model_path}')
+        
+        self.rknn = RKNN(verbose=False)
+        self.rknn.load_rknn(str(actual_path))
+        self.rknn.init_runtime()
 
     def _open_camera(self) -> None:
-        """打开本地摄像头并设置采集参数。"""
-        if self.camera_test_mode:
-            return
-
-        if self.cap is not None:
-            self.cap.release()
-            self.cap = None
-
-        source: Union[int, str] = int(self.camera_device) if self.camera_device.isdigit() else self.camera_device
+        source = int(self.camera_device) if self.camera_device.isdigit() else self.camera_device
         self.cap = cv2.VideoCapture(source)
-
         if not self.cap.isOpened():
             self.get_logger().error(f'Failed to open camera: {self.camera_device}')
             self.cap = None
             return
-
-        # 这些参数并不保证驱动一定接受，但会尽量尝试设置。
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.frame_width)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.frame_height)
         self.cap.set(cv2.CAP_PROP_FPS, self.camera_fps)
 
     def image_callback(self, msg: Image) -> None:
-        """在 camera_test_mode 下缓存最新一帧图像。
-
-        这样 timer_callback 可以按照固定推理频率运行，
-        而不是每收到一帧图像就立即推理。
-        """
         try:
-            if self.bridge is None:
-                return
-            self.latest_frame = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
-        except Exception as exc:
-            self.get_logger().error(f'image_callback failed: {exc}')
+            if self.bridge:
+                self.latest_frame = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+        except Exception as e:
+            self.get_logger().error(f'Image conversion failed: {e}')
+
+    def detect_rknn(self, frame: np.ndarray) -> list[dict]:
+        """RKNN RetinaFace 检测。"""
+        if not self.rknn or frame.size == 0:
+            return []
+        try:
+            h, w = frame.shape[:2]
+            img_resized = cv2.resize(frame, (self.input_size, self.input_size))
+            outputs = self.rknn.inference([img_resized])
+            return self._parse_outputs(outputs, w, h)
+        except Exception as e:
+            self.get_logger().debug(f'RKNN inference failed: {e}')
+            return []
+
+    def _parse_outputs(self, outputs, w: int, h: int) -> list[dict]:
+        """解析 RKNN 输出。"""
+        detections = []
+        try:
+            if len(outputs) < 2:
+                return detections
+            
+            locations = outputs[0]
+            confidences = outputs[1]
+            scale_x, scale_y = w / self.input_size, h / self.input_size
+            
+            for i in range(len(locations)):
+                conf = confidences[i][0] if confidences[i].ndim > 0 else confidences[i]
+                if conf < self.confidence_threshold:
+                    continue
+                
+                loc = locations[i]
+                x1, y1, x2, y2 = loc[0] * scale_x, loc[1] * scale_y, loc[2] * scale_x, loc[3] * scale_y
+                cx, cy = (x1 + x2) / 2, (y1 + y2) / 2
+                width, height = x2 - x1, y2 - y1
+                
+                detections.append({
+                    'cx': cx, 'cy': cy, 'w': width, 'h': height,
+                    'conf': float(conf), 'area': width * height,
+                })
+        except Exception as e:
+            self.get_logger().debug(f'Parse outputs failed: {e}')
+        return detections
+
+    def detect_skin(self, frame: np.ndarray) -> list[dict]:
+        """肤色检测。"""
+        if not frame.size:
+            return []
+        
+        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        mask = cv2.inRange(hsv, (0, 20, 70), (20, 255, 255))
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+        mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+        mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+        
+        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        detections = []
+        
+        for contour in contours:
+            area = cv2.contourArea(contour)
+            if area < 500:
+                continue
+            x, y, w, h = cv2.boundingRect(contour)
+            cx, cy = x + w / 2, y + h / 2
+            conf = min(1.0, area / 10000.0)
+            if conf >= self.confidence_threshold:
+                detections.append({'cx': cx, 'cy': cy, 'w': w, 'h': h, 'conf': conf, 'area': area})
+        
+        return detections
 
     def timer_callback(self) -> None:
-        """读取一帧图像、执行检测并发布最佳目标。"""
-        try:
-            now = self.get_clock().now()
-            if self.camera_test_mode:
-                if self.latest_frame is None:
-                    return
-                frame = self.latest_frame.copy()
-            else:
-                if self.cap is None:
-                    elapsed = (now - self.last_retry_time).nanoseconds / 1e9
-                    if elapsed >= self.camera_retry_sec:
-                        self.last_retry_time = now
-                        self._open_camera()
-                    return
-
-                ok, frame = self.cap.read()
-                if not ok or frame is None:
-                    self.get_logger().warn('Camera frame grab failed, reopening camera.')
-                    self.last_retry_time = now
+        frame = self.latest_frame if self.camera_test_mode else (
+            self.cap.read()[1] if self.cap and self.cap.isOpened() else None
+        )
+        
+        if frame is None or not frame.size:
+            if not self.camera_test_mode and (not self.cap or not self.cap.isOpened()):
+                now = self.get_clock().now()
+                if (now - self.last_retry_time).nanoseconds / 1e9 > self.camera_retry_sec:
                     self._open_camera()
-                    self._publish_no_target()
-                    return
-
-            # YOLO 推理。
-            try:
-                results = self.model.predict(
-                    source=frame,
-                    verbose=False,
-                    imgsz=self.input_size,
-                    conf=self.confidence_threshold,
-                    iou=self.iou_threshold,
-                    device=self.device,
-                )
-            except Exception as exc:  # pragma: no cover - hardware/runtime path
-                self.get_logger().error(f'YOLO inference failed: {exc}')
-                self._publish_no_target()
-                return
-
-            result = results[0]
-            boxes = result.boxes
-
-            if boxes is None or len(boxes) == 0:
-                self._publish_no_target()
-                return
-
-            frame_h, frame_w = frame.shape[:2]
-            best_candidate = None
-            best_area = -1.0
-            names = result.names
-
-            # 策略：从所有检测框里挑出“面积最大”的目标作为跟随对象。
-            # 对于 person 跟随场景，这通常代表目标离相机更近、也更值得优先跟随。
-            for box in boxes:
-                cls_id = int(box.cls.item())
-                if isinstance(names, dict):
-                    cls_name = names.get(cls_id, str(cls_id))
-                elif 0 <= cls_id < len(names):
-                    cls_name = names[cls_id]
-                else:
-                    cls_name = str(cls_id)
-                if self.target_class_names and cls_name not in self.target_class_names:
-                    continue
-
-                x1, y1, x2, y2 = box.xyxy[0].tolist()
-                width = max(x2 - x1, 0.0)
-                height = max(y2 - y1, 0.0)
-                area = width * height
-
-                if area <= best_area:
-                    continue
-
-                confidence = float(box.conf.item())
-                center_x = (x1 + x2) * 0.5
-                center_y = (y1 + y2) * 0.5
-
-                # 简单单目距离估计：
-                # 距离 ≈ 真实高度 * 焦距 / 像素高度。
-                approx_distance = -1.0
-                if height > 1.0 and self.camera_focal_length_px > 0.0:
-                    approx_distance = (
-                        self.target_real_height_m * self.camera_focal_length_px / height
-                    )
-
-                best_candidate = [
-                    center_x / max(frame_w, 1),
-                    center_y / max(frame_h, 1),
-                    width / max(frame_w, 1),
-                    height / max(frame_h, 1),
-                    confidence,
-                    area / max(frame_w * frame_h, 1),
-                    approx_distance,
-                    float(frame_w),
-                    float(frame_h),
-                ]
-                best_area = area
-
-            if best_candidate is None:
-                self._publish_no_target()
-                return
-
-            msg = Float32MultiArray()
-            msg.data = best_candidate
-            self.target_pub.publish(msg)
-
-            # 输出 FPS、置信度和中心坐标，便于现场调试。
-            inference_dt = max((now - self.last_inference_time).nanoseconds / 1e9, 1e-6)
-            self.last_inference_time = now
-            fps = 1.0 / inference_dt
-            if (now - self.last_log_time).nanoseconds / 1e9 >= self.log_interval_sec:
-                self.last_log_time = now
-                self.get_logger().info(
-                    f'YOLO FPS={fps:.2f} conf={best_candidate[4]:.2f} '
-                    f'center=({best_candidate[0]:.3f}, {best_candidate[1]:.3f})'
-                )
-        except Exception as exc:
-            self.get_logger().error(f'timer_callback failed: {exc}')
-
-    def _publish_no_target(self) -> None:
-        """在允许时发布“无目标”消息。"""
-        if not self.publish_no_target:
+                    self.last_retry_time = now
             return
+
+        # 检测
+        detections = self.detect_rknn(frame) if self.use_rknn else self.detect_skin(frame)
+        best_det = max(detections, key=lambda d: d['area']) if detections else None
+
+        # 发布
         msg = Float32MultiArray()
-        msg.data = []
+        if best_det:
+            distance = (self.target_real_height_m * self.camera_focal_length_px) / best_det['h'] if best_det['h'] > 0 else 999.0
+            distance = max(0.1, min(distance, 50.0))
+            msg.data = [float(best_det['cx']), float(best_det['cy']), float(best_det['w']), float(best_det['h']), float(best_det['conf']), float(distance)]
+            
+            now = self.get_clock().now()
+            if (now - self.last_log_time).nanoseconds / 1e9 > self.log_interval_sec:
+                self.get_logger().info(f'Detection: cx={best_det["cx"]:.0f} cy={best_det["cy"]:.0f} conf={best_det["conf"]:.2f} dist={distance:.2f}m')
+                self.last_log_time = now
+        elif self.publish_no_target:
+            msg.data = [float('nan')] * 6
+
         self.target_pub.publish(msg)
 
-    def destroy_node(self) -> bool:
-        """节点销毁前释放摄像头资源。"""
-        if self.cap is not None:
-            self.cap.release()
-            self.cap = None
-        return super().destroy_node()
 
-
-def main(args: Optional[list] = None) -> None:
-    """节点入口函数。"""
+def main(args=None) -> None:
     rclpy.init(args=args)
     node = YoloDetectionNode()
     try:
@@ -305,6 +270,10 @@ def main(args: Optional[list] = None) -> None:
     except KeyboardInterrupt:
         pass
     finally:
+        if node.rknn:
+            node.rknn.release()
+        if node.cap:
+            node.cap.release()
         node.destroy_node()
         rclpy.shutdown()
 

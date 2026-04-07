@@ -1,0 +1,8 @@
+[console_scripts]
+joy_teleop_node = visual_following_car.joy_teleop_node:main
+mock_serial_bridge = visual_following_car.mock_serial_bridge:main
+screenshot_node = visual_following_car.screenshot_node:main
+serial_bridge_node = visual_following_car.serial_bridge_node:main
+visual_follower_node = visual_following_car.visual_follower_node:main
+yolo_detection_node = visual_following_car.yolo_detection_node:main
+

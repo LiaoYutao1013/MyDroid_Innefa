@@ -1,0 +1,23 @@
+[7.888s] Invoking command in '/home/radxa/MyDroid/ros2_ws/build/visual_following_car': PYTHONPATH=/home/radxa/MyDroid/ros2_ws/build/visual_following_car/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/radxa/MyDroid/ros2_ws/build/visual_following_car/build --no-deps symlink_data
+[11.686s] running develop
+[13.660s] running egg_info
+[13.662s] writing visual_following_car.egg-info/PKG-INFO
+[13.665s] writing dependency_links to visual_following_car.egg-info/dependency_links.txt
+[13.670s] writing entry points to visual_following_car.egg-info/entry_points.txt
+[13.672s] writing requirements to visual_following_car.egg-info/requires.txt
+[13.674s] writing top-level names to visual_following_car.egg-info/top_level.txt
+[13.696s] reading manifest file 'visual_following_car.egg-info/SOURCES.txt'
+[13.706s] writing manifest file 'visual_following_car.egg-info/SOURCES.txt'
+[13.726s] running build_ext
+[13.729s] Creating /home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib/python3.10/site-packages/visual-following-car.egg-link (link to .)
+[13.742s] Installing joy_teleop_node script to /home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib/visual_following_car
+[13.747s] Installing mock_serial_bridge script to /home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib/visual_following_car
+[13.751s] Installing screenshot_node script to /home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib/visual_following_car
+[13.755s] Installing serial_bridge_node script to /home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib/visual_following_car
+[13.757s] Installing visual_follower_node script to /home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib/visual_following_car
+[13.758s] Installing yolo_detection_node script to /home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib/visual_following_car
+[13.759s] 
+[13.761s] Installed /home/radxa/MyDroid/ros2_ws/build/visual_following_car
+[13.762s] running symlink_data
+[13.772s] symbolically linking /home/radxa/MyDroid/ros2_ws/build/visual_following_car/launch/camera_test_with_screenshot.py -> /home/radxa/MyDroid/ros2_ws/install/visual_following_car/share/visual_following_car/launch
+[14.203s] Invoked command in '/home/radxa/MyDroid/ros2_ws/build/visual_following_car' returned '0': PYTHONPATH=/home/radxa/MyDroid/ros2_ws/build/visual_following_car/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/radxa/MyDroid/ros2_ws/build/visual_following_car/build --no-deps symlink_data

@@ -1,0 +1,142 @@
+[0.000000] (-) TimerEvent: {}
+[0.004563] (visual_following_car) JobQueued: {'identifier': 'visual_following_car', 'dependencies': OrderedDict()}
+[0.006688] (visual_following_car) JobStarted: {'identifier': 'visual_following_car'}
+[0.096528] (-) TimerEvent: {}
+[0.198064] (-) TimerEvent: {}
+[0.298980] (-) TimerEvent: {}
+[0.399932] (-) TimerEvent: {}
+[0.500727] (-) TimerEvent: {}
+[0.601495] (-) TimerEvent: {}
+[0.702404] (-) TimerEvent: {}
+[0.803611] (-) TimerEvent: {}
+[0.904703] (-) TimerEvent: {}
+[1.005825] (-) TimerEvent: {}
+[1.106953] (-) TimerEvent: {}
+[1.208001] (-) TimerEvent: {}
+[1.309264] (-) TimerEvent: {}
+[1.410141] (-) TimerEvent: {}
+[1.510896] (-) TimerEvent: {}
+[1.611902] (-) TimerEvent: {}
+[1.713262] (-) TimerEvent: {}
+[1.814239] (-) TimerEvent: {}
+[1.915141] (-) TimerEvent: {}
+[2.015976] (-) TimerEvent: {}
+[2.116987] (-) TimerEvent: {}
+[2.217822] (-) TimerEvent: {}
+[2.318675] (-) TimerEvent: {}
+[2.419864] (-) TimerEvent: {}
+[2.520774] (-) TimerEvent: {}
+[2.621942] (-) TimerEvent: {}
+[2.723118] (-) TimerEvent: {}
+[2.824742] (-) TimerEvent: {}
+[2.925747] (-) TimerEvent: {}
+[3.026621] (-) TimerEvent: {}
+[3.127403] (-) TimerEvent: {}
+[3.229108] (-) TimerEvent: {}
+[3.330092] (-) TimerEvent: {}
+[3.430910] (-) TimerEvent: {}
+[3.531838] (-) TimerEvent: {}
+[3.632908] (-) TimerEvent: {}
+[3.733839] (-) TimerEvent: {}
+[3.834746] (-) TimerEvent: {}
+[3.935778] (-) TimerEvent: {}
+[4.036615] (-) TimerEvent: {}
+[4.137423] (-) TimerEvent: {}
+[4.238541] (-) TimerEvent: {}
+[4.339824] (-) TimerEvent: {}
+[4.440809] (-) TimerEvent: {}
+[4.541770] (-) TimerEvent: {}
+[4.642727] (-) TimerEvent: {}
+[4.743849] (-) TimerEvent: {}
+[4.844962] (-) TimerEvent: {}
+[4.946110] (-) TimerEvent: {}
+[5.046951] (-) TimerEvent: {}
+[5.148001] (-) TimerEvent: {}
+[5.249141] (-) TimerEvent: {}
+[5.350354] (-) TimerEvent: {}
+[5.451346] (-) TimerEvent: {}
+[5.552325] (-) TimerEvent: {}
+[5.653368] (-) TimerEvent: {}
+[5.754307] (-) TimerEvent: {}
+[5.855215] (-) TimerEvent: {}
+[5.956611] (-) TimerEvent: {}
+[6.057604] (-) TimerEvent: {}
+[6.158704] (-) TimerEvent: {}
+[6.259877] (-) TimerEvent: {}
+[6.360890] (-) TimerEvent: {}
+[6.406481] (visual_following_car) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', '-W', 'ignore:easy_install command is deprecated', 'setup.py', 'develop', '--editable', '--build-directory', '/home/radxa/MyDroid/ros2_ws/build/visual_following_car/build', '--no-deps', 'symlink_data'], 'cwd': '/home/radxa/MyDroid/ros2_ws/build/visual_following_car', 'env': {'PYTHON_BASIC_REPL': '1', 'LESSOPEN': '| /usr/bin/lesspipe %s', 'USER': 'radxa', 'SSH_CLIENT': '192.168.137.1 63743 22', 'GIT_EDITOR': ':', 'XDG_SESSION_TYPE': 'tty', 'GIT_ASKPASS': '/home/radxa/.vscode-server/cli/servers/Stable-e7fb5e96c0730b9deb70b33781f98e2f35975036/server/extensions/git/dist/askpass.sh', 'SHLVL': '0', 'LD_LIBRARY_PATH': '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/aarch64-linux-gnu:/opt/ros/humble/lib', 'BROWSER': '/home/radxa/.vscode-server/cli/servers/Stable-e7fb5e96c0730b9deb70b33781f98e2f35975036/server/bin/helpers/browser.sh', 'MOTD_SHOWN': 'pam', 'HOME': '/home/radxa', 'OLDPWD': '/home/radxa/MyDroid/ros2_ws/src/visual_following_car', 'TERM_PROGRAM_VERSION': '1.114.0', 'VSCODE_IPC_HOOK_CLI': '/run/user/1000/vscode-ipc-fc80d69f-1392-4f3d-9966-0689b34a8e4d.sock', 'ROS_PYTHON_VERSION': '3', 'VSCODE_GIT_ASKPASS_MAIN': '/home/radxa/.vscode-server/cli/servers/Stable-e7fb5e96c0730b9deb70b33781f98e2f35975036/server/extensions/git/dist/askpass-main.js', 'VSCODE_GIT_ASKPASS_NODE': '/home/radxa/.vscode-server/cli/servers/Stable-e7fb5e96c0730b9deb70b33781f98e2f35975036/server/node', 'PYDEVD_DISABLE_FILE_VALIDATION': '1', 'BUNDLED_DEBUGPY_PATH': '/home/radxa/.vscode-server/extensions/ms-python.debugpy-2025.18.0/bundled/libs/debugpy', 'VSCODE_PYTHON_AUTOACTIVATE_GUARD': '1', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLORTERM': 'truecolor', 'COLCON_PREFIX_PATH': '/home/radxa/MyDroid/ros2_ws/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'radxa', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'TERM': 'xterm-256color', 'XDG_SESSION_ID': '10', 'ROS_LOCALHOST_ONLY': '0', 'HISTCONTROL': 'ignorespace', 'PATH': '/home/radxa/.vscode-server/data/User/globalStorage/github.copilot-chat/debugCommand:/home/radxa/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli:/home/radxa/.vscode-server/cli/servers/Stable-e7fb5e96c0730b9deb70b33781f98e2f35975036/server/bin/remote-cli:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/radxa/.vscode-server/extensions/ms-python.debugpy-2025.18.0/bundled/scripts/noConfigScripts', 'XDG_RUNTIME_DIR': '/run/user/1000', 'VSCODE_DEBUGPY_ADAPTER_ENDPOINTS': '/home/radxa/.vscode-server/extensions/ms-python.debugpy-2025.18.0/.noConfigDebugAdapterEndpoints/endpoint-c10a25862e5a1ec9.txt', 'QT_QUICK_BACKEND': 'software', 'LANG': 'en_US.UTF-8', 'PYTHONSTARTUP': '/home/radxa/.vscode-server/data/User/workspaceStorage/7baa29256799c17623e4ed24d3af14f5/ms-python.python/pythonrc.py', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'VSCODE_GIT_IPC_HANDLE': '/run/user/1000/vscode-git-53dfc704e7.sock', 'TERM_PROGRAM': 'vscode', 'AMENT_PREFIX_PATH': '/home/radxa/MyDroid/ros2_ws/install/visual_following_car:/opt/ros/humble', 'SHELL': '/bin/bash', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'VSCODE_GIT_ASKPASS_EXTRA_ARGS': '', 'GIT_PAGER': 'cat', 'PWD': '/home/radxa/MyDroid/ros2_ws/build/visual_following_car', 'GIT_MERGE_AUTOEDIT': 'no', 'SSH_CONNECTION': '192.168.137.1 63743 192.168.137.147 22', 'XDG_DATA_DIRS': '/usr/local/share:/usr/share:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/radxa/MyDroid/ros2_ws/build/visual_following_car/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib/python3.10/site-packages:/home/radxa/MyDroid/ros2_ws/build/visual_following_car:/home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'COLCON': '1'}, 'shell': False}
+[6.461149] (-) TimerEvent: {}
+[6.561967] (-) TimerEvent: {}
+[6.662810] (-) TimerEvent: {}
+[6.763724] (-) TimerEvent: {}
+[6.864546] (-) TimerEvent: {}
+[6.965541] (-) TimerEvent: {}
+[7.066659] (-) TimerEvent: {}
+[7.167521] (-) TimerEvent: {}
+[7.268480] (-) TimerEvent: {}
+[7.369454] (-) TimerEvent: {}
+[7.470368] (-) TimerEvent: {}
+[7.571414] (-) TimerEvent: {}
+[7.672285] (-) TimerEvent: {}
+[7.773153] (-) TimerEvent: {}
+[7.873977] (-) TimerEvent: {}
+[7.974771] (-) TimerEvent: {}
+[8.075724] (-) TimerEvent: {}
+[8.176977] (-) TimerEvent: {}
+[8.277987] (-) TimerEvent: {}
+[8.378995] (-) TimerEvent: {}
+[8.480126] (-) TimerEvent: {}
+[8.581091] (-) TimerEvent: {}
+[8.682006] (-) TimerEvent: {}
+[8.783182] (-) TimerEvent: {}
+[8.884202] (-) TimerEvent: {}
+[8.985158] (-) TimerEvent: {}
+[9.086063] (-) TimerEvent: {}
+[9.187033] (-) TimerEvent: {}
+[9.287953] (-) TimerEvent: {}
+[9.389039] (-) TimerEvent: {}
+[9.490033] (-) TimerEvent: {}
+[9.591049] (-) TimerEvent: {}
+[9.674514] (visual_following_car) StdoutLine: {'line': b'running develop\n'}
+[9.691414] (-) TimerEvent: {}
+[9.792407] (-) TimerEvent: {}
+[9.893526] (-) TimerEvent: {}
+[9.994530] (-) TimerEvent: {}
+[10.095659] (-) TimerEvent: {}
+[10.196671] (-) TimerEvent: {}
+[10.297724] (-) TimerEvent: {}
+[10.398920] (-) TimerEvent: {}
+[10.500003] (-) TimerEvent: {}
+[10.601181] (-) TimerEvent: {}
+[10.702228] (-) TimerEvent: {}
+[10.803223] (-) TimerEvent: {}
+[10.904229] (-) TimerEvent: {}
+[11.005401] (-) TimerEvent: {}
+[11.106716] (-) TimerEvent: {}
+[11.170154] (visual_following_car) StdoutLine: {'line': b'running egg_info\n'}
+[11.175229] (visual_following_car) StdoutLine: {'line': b'writing visual_following_car.egg-info/PKG-INFO\n'}
+[11.179468] (visual_following_car) StdoutLine: {'line': b'writing dependency_links to visual_following_car.egg-info/dependency_links.txt\n'}
+[11.183623] (visual_following_car) StdoutLine: {'line': b'writing entry points to visual_following_car.egg-info/entry_points.txt\n'}
+[11.185102] (visual_following_car) StdoutLine: {'line': b'writing requirements to visual_following_car.egg-info/requires.txt\n'}
+[11.186159] (visual_following_car) StdoutLine: {'line': b'writing top-level names to visual_following_car.egg-info/top_level.txt\n'}
+[11.204844] (visual_following_car) StdoutLine: {'line': b"reading manifest file 'visual_following_car.egg-info/SOURCES.txt'\n"}
+[11.206952] (-) TimerEvent: {}
+[11.214992] (visual_following_car) StdoutLine: {'line': b"writing manifest file 'visual_following_car.egg-info/SOURCES.txt'\n"}
+[11.231318] (visual_following_car) StdoutLine: {'line': b'running build_ext\n'}
+[11.236814] (visual_following_car) StdoutLine: {'line': b'Creating /home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib/python3.10/site-packages/visual-following-car.egg-link (link to .)\n'}
+[11.245490] (visual_following_car) StdoutLine: {'line': b'Installing joy_teleop_node script to /home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib/visual_following_car\n'}
+[11.248461] (visual_following_car) StdoutLine: {'line': b'Installing mock_serial_bridge script to /home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib/visual_following_car\n'}
+[11.252093] (visual_following_car) StdoutLine: {'line': b'Installing serial_bridge_node script to /home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib/visual_following_car\n'}
+[11.253370] (visual_following_car) StdoutLine: {'line': b'Installing visual_follower_node script to /home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib/visual_following_car\n'}
+[11.254698] (visual_following_car) StdoutLine: {'line': b'Installing yolo_detection_node script to /home/radxa/MyDroid/ros2_ws/install/visual_following_car/lib/visual_following_car\n'}
+[11.257449] (visual_following_car) StdoutLine: {'line': b'\n'}
+[11.258791] (visual_following_car) StdoutLine: {'line': b'Installed /home/radxa/MyDroid/ros2_ws/build/visual_following_car\n'}
+[11.259904] (visual_following_car) StdoutLine: {'line': b'running symlink_data\n'}
+[11.307440] (-) TimerEvent: {}
+[11.408446] (-) TimerEvent: {}
+[11.509488] (-) TimerEvent: {}
+[11.600130] (visual_following_car) CommandEnded: {'returncode': 0}
+[11.610632] (-) TimerEvent: {}
+[11.712044] (-) TimerEvent: {}
+[11.741471] (visual_following_car) JobEnded: {'identifier': 'visual_following_car', 'rc': 0}
+[11.746386] (-) EventReactorShutdown: {}
