@@ -1,0 +1,203 @@
+# ==============================
+# visual_following_car.yaml
+# ==============================
+# 这个文件用于整车真机运行。
+# 包含：
+# 1. 手柄输入节点参数。
+# 2. YOLO 检测节点参数。
+# 3. 视觉跟随控制节点参数。
+# 4. 串口桥节点参数。
+#
+# 使用方法：
+# ros2 launch visual_following_car bringup.launch.py
+#
+# 如需调参，建议优先修改这里，而不要直接改 Python 代码。
+
+joy_node:
+  ros__parameters:
+    # Linux 下的手柄设备文件。
+    dev: /dev/input/js0
+
+    # 手柄消息的底层死区，通常保持默认即可。
+    deadzone: 0.10
+
+    # 没有新的手柄事件时，也会按该频率重复发布上一帧数据。
+    autorepeat_rate: 50.0
+
+    # 多个相近事件合并的时间窗口。
+    coalesce_interval: 0.02
+
+joy_teleop_node:
+  ros__parameters:
+    # 控制命令发布频率。
+    publish_rate_hz: 30.0
+
+    # 超过该时间未收到手柄消息，则视为掉线，底盘输出清零。
+    joy_timeout_sec: 0.5
+
+    # 摇杆死区，避免回中抖动导致误动作。
+    deadzone: 0.12
+
+    # 启动时是否默认进入自动跟随模式。
+    start_in_auto_mode: false
+
+    # 急停是否使用锁存模式。
+    # true: 按一次进入急停，再按一次解除。
+    # false: 按住急停，松开恢复。
+    estop_latched: true
+
+    # 手动模式下底盘线速度最大值，单位 m/s。
+    max_linear_x_mps: 0.80
+    max_linear_y_mps: 0.60
+
+    # 手动模式下底盘角速度最大值，单位 rad/s。
+    max_angular_z_radps: 1.20
+
+    # 手动控制 Pan 云台时允许的最大角速度，单位 deg/s。
+    max_pan_rate_deg_s: 120.0
+
+    # Pan 云台的软件限位范围。
+    pan_min_deg: 0.0
+    pan_max_deg: 180.0
+
+    # Pan 云台中位角度。
+    pan_neutral_deg: 90.0
+
+    # 手柄轴映射。
+    axes.linear_x: 1
+    axes.linear_y: 0
+    axes.angular_z: 3
+    axes.gimbal_pan: 6
+
+    # 手柄按键映射。
+    # mode_toggle: 手动/自动切换。
+    # estop: 急停按钮。
+    # gimbal_enable_toggle: Pan 云台使能切换。
+    # recenter_gimbal: Pan 云台回中。
+    buttons.mode_toggle: 0
+    buttons.estop: 1
+    buttons.gimbal_enable_toggle: 2
+    buttons.recenter_gimbal: 3
+
+    # 云台控制相关参数。
+    gimbal.pan_enabled: true
+    gimbal.pan_neutral: 90.0
+    gimbal.pan_max_angle: 160.0
+
+yolo_detection_node:
+  ros__parameters:
+    # 本地摄像头设备路径。
+    camera_device: /dev/video0
+
+    # 摄像头图像尺寸。
+    frame_width: 640
+    frame_height: 480
+
+    # 摄像头采样帧率。
+    camera_fps: 30.0
+
+    # YOLO 推理频率。
+    inference_rate_hz: 10.0
+
+    # 摄像头失败后的重试周期。
+    camera_retry_sec: 2.0
+
+    # YOLO 模型权重文件。
+    model_path: yolov8n.pt
+
+    # 模型输入尺寸。
+    input_size: 416
+
+    # 置信度阈值和 NMS IOU 阈值。
+    confidence_threshold: 0.45
+    iou_threshold: 0.45
+
+    # 推理设备。
+    device: cpu
+
+    # 需要保留的目标类别列表。
+    target_class_names: [person]
+
+    # 用于单目距离粗估的人体真实高度，单位米。
+    target_real_height_m: 1.70
+
+    # 摄像头焦距的像素表示，用于粗略距离估算。
+    camera_focal_length_px: 650.0
+
+    # 无目标时是否也发布空数组消息。
+    publish_no_target: true
+
+visual_follower_node:
+  ros__parameters:
+    # 跟随控制主循环频率。
+    control_rate_hz: 20.0
+
+    # 检测目标超过该时间未更新，则判定为丢失。
+    target_timeout_sec: 0.50
+
+    # 希望与目标保持的距离，单位米。
+    target_distance_m: 1.50
+
+    # 前后距离控制增益。
+    distance_kp: 0.80
+
+    # 左右横移控制增益。
+    strafe_kp: 1.10
+
+    # 根据 Pan 偏差给底盘角速度回正的增益。
+    omega_from_pan_kp: 1.30
+
+    # 允许的最大底盘速度范围。
+    max_linear_x_mps: 0.80
+    max_linear_y_mps: 0.60
+    max_angular_z_radps: 1.20
+
+    # 输出加速度限制，避免速度突变。
+    max_linear_accel_mps2: 1.20
+    max_lateral_accel_mps2: 1.20
+    max_angular_accel_radps2: 2.00
+
+    # Pan 云台限位和回中速度。
+    pan_min_deg: 0.0
+    pan_max_deg: 180.0
+    recenter_rate_deg_s: 50.0
+
+    # Pan 云台功能开关与控制参数。
+    gimbal.pan_enabled: true
+    gimbal.pan_neutral: 90.0
+    gimbal.pan_kp: 0.8
+    gimbal.pan_max_angle: 160.0
+
+serial_bridge_node:
+  ros__parameters:
+    # ROCK 3B 到 STM32 的串口设备。
+    port: /dev/ttyS1
+
+    # 串口波特率。
+    baudrate: 115200
+
+    # 串口发送频率。
+    send_rate_hz: 30.0
+
+    # 超过该时间未收到新的控制命令，则发送安全值。
+    command_timeout_sec: 0.50
+
+    # 串口断开后的重连周期。
+    reconnect_interval_sec: 2.0
+
+    # 是否使用旧协议。
+    # false: 使用新协议（Pan 直接发整数度）。
+    # true: 使用旧协议（Pan 发 0.01 度单位）。
+    use_legacy_protocol: false
+
+    # 串口桥在打包前对速度做二次限幅。
+    max_linear_x_mps: 0.80
+    max_linear_y_mps: 0.60
+    max_angular_z_radps: 1.20
+
+    # Pan 云台限位和默认参数。
+    pan_min_deg: 0.0
+    pan_max_deg: 180.0
+    gimbal.pan_enabled: true
+    gimbal.pan_neutral: 90.0
+    gimbal.pan_max_angle: 160.0

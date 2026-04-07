@@ -1,0 +1,17 @@
+# RKNN Toolkit 2 依赖（WSL 环境）
+
+# 核心依赖
+rknn-toolkit2>=1.6.0
+
+# ONNX - RKNN 2 推荐版本
+onnx>=1.13.0,<=1.16.0
+
+# 其他依赖
+numpy>=1.19.0,<1.24.0
+protobuf>=3.20.0,<4.0.0
+pyyaml>=5.4
+
+# 可选：性能优化
+# tensorflow-cpu>=2.8.0  # 用于某些模型的优化
+# onnxsim>=0.4.0        # ONNX 模型简化
+
