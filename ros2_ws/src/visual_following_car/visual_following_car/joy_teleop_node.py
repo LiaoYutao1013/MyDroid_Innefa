@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 from typing import List, Optional
+from collections import deque
 
 import rclpy
 from geometry_msgs.msg import Twist
@@ -49,6 +50,8 @@ class JoyTeleopNode(Node):
                 ('pan_min_deg', 0.0),
                 ('pan_max_deg', 180.0),
                 ('pan_neutral_deg', 90.0),
+                # 可选：指定控制器型号或进入映射助手模式
+                ('controller_model', 'generic'),
                 ('axes.linear_x', 1),
                 ('axes.linear_y', 0),
                 ('axes.angular_z', 3),
@@ -79,6 +82,10 @@ class JoyTeleopNode(Node):
         )
         self.pan_neutral_deg = float(self.get_parameter('gimbal.pan_neutral').value)
 
+        # 控制器型号：可选值示例： 'generic' | 'mapping_assistant' | 'thunderobot'（或中文 '雷神')
+        self.controller_model = str(self.get_parameter('controller_model').value).lower()
+        self.mapping_mode = self.controller_model in ('mapping_assistant', 'thunderobot', '雷神')
+
         # 手柄轴映射：不同型号手柄的轴编号可能不同，因此必须参数化。
         self.axes_linear_x = int(self.get_parameter('axes.linear_x').value)
         self.axes_linear_y = int(self.get_parameter('axes.linear_y').value)
@@ -90,6 +97,17 @@ class JoyTeleopNode(Node):
         self.button_estop = int(self.get_parameter('buttons.estop').value)
         self.button_gimbal_enable_toggle = int(self.get_parameter('buttons.gimbal_enable_toggle').value)
         self.button_recenter_gimbal = int(self.get_parameter('buttons.recenter_gimbal').value)
+
+        # 映射助手相关状态（仅在 mapping_mode=True 时使用）
+        self.mapping_logged = False
+        self.mapping_next_axis = 0
+        self.mapping_next_button = 0
+        self.mapping_axes_targets = ['linear_x', 'linear_y', 'angular_z', 'gimbal_pan']
+        self.mapping_buttons_targets = ['mode_toggle', 'estop', 'gimbal_enable_toggle', 'recenter_gimbal']
+        self.axis_sample_buffer = deque(maxlen=60)
+        self.mapping_axes_map = {}
+        self.mapping_buttons_map = {}
+        self.mapping_done = False
 
         # 运行状态变量：这些变量会在回调和定时器之间共享。
         self.auto_mode = bool(self.get_parameter('start_in_auto_mode').value)
@@ -137,6 +155,68 @@ class JoyTeleopNode(Node):
         try:
             self.latest_joy = msg
             self.last_joy_time = self.get_clock().now()
+
+            # 如果启用映射助手，则尝试自动检测轴与按键对应关系。
+            if self.mapping_mode and not self.mapping_done:
+                # 收集最近的轴样本用于方差/幅度检测。
+                if msg.axes:
+                    self.axis_sample_buffer.append(list(msg.axes))
+
+                # 轴检测：若用户移动了某个轴（样本窗口内幅度最大），则把该轴分配给当前目标。
+                if self.mapping_next_axis < len(self.mapping_axes_targets) and len(self.axis_sample_buffer) >= 8:
+                    # 计算每个轴在缓冲区内的幅度（max-min）
+                    sample0 = self.axis_sample_buffer[0]
+                    num_axes = len(sample0)
+                    axis_ranges = [0.0] * num_axes
+                    for samples in self.axis_sample_buffer:
+                        for i in range(num_axes):
+                            v = samples[i]
+                            if v > axis_ranges[i]:
+                                axis_ranges[i] = v
+                    # axis_ranges currently holds max, need min too; recompute properly
+                    axis_mins = [float('inf')] * num_axes
+                    axis_maxs = [float('-inf')] * num_axes
+                    for samples in self.axis_sample_buffer:
+                        for i in range(num_axes):
+                            v = samples[i]
+                            if v < axis_mins[i]:
+                                axis_mins[i] = v
+                            if v > axis_maxs[i]:
+                                axis_maxs[i] = v
+                    axis_amplitudes = [axis_maxs[i] - axis_mins[i] for i in range(num_axes)]
+                    # 选择幅度最大的轴，且幅度超过阈值
+                    best_idx = max(range(num_axes), key=lambda i: axis_amplitudes[i])
+                    best_amp = axis_amplitudes[best_idx]
+                    if best_amp >= 0.4 and best_idx not in self.mapping_axes_map.values():
+                        target = self.mapping_axes_targets[self.mapping_next_axis]
+                        self.mapping_axes_map[target] = best_idx
+                        self.mapping_next_axis += 1
+                        self.get_logger().info(f"Mapped axis '{target}' -> index {best_idx} (amp={best_amp:.2f}). Move the next control.")
+
+                # 按键检测：检测上升沿并分配给下一个目标按键。
+                for idx, val in enumerate(msg.buttons):
+                    prev = self.prev_buttons[idx] if idx < len(self.prev_buttons) else 0
+                    if val == 1 and prev == 0 and self.mapping_next_button < len(self.mapping_buttons_targets):
+                        target_btn = self.mapping_buttons_targets[self.mapping_next_button]
+                        if idx not in self.mapping_buttons_map.values():
+                            self.mapping_buttons_map[target_btn] = idx
+                            self.mapping_next_button += 1
+                            self.get_logger().info(f"Mapped button '{target_btn}' -> index {idx}. Press the next button when ready.")
+
+                # 如果全部映射完成，则生成 YAML 片段并提示用户如何保存。
+                if self.mapping_next_axis >= len(self.mapping_axes_targets) and self.mapping_next_button >= len(self.mapping_buttons_targets):
+                    self.mapping_done = True
+                    self.get_logger().info('Controller mapping completed. Suggested YAML snippet:')
+                    # 生成 YAML 字符串
+                    yaml_lines = ["# Paste these into config/visual_following_car.yaml under joy_teleop_node:\njoy_teleop_node:\n  ros__parameters:"]
+                    for k, v in self.mapping_axes_map.items():
+                        yaml_lines.append(f"    axes.{k}: {v}")
+                    for k, v in self.mapping_buttons_map.items():
+                        yaml_lines.append(f"    buttons.{k}: {v}")
+                    yaml_text = "\n".join(yaml_lines)
+                    for line in yaml_text.split('\n'):
+                        self.get_logger().info(line)
+                    self.get_logger().info("After applying the YAML, restart the node or set parameters to persist the mapping.")
 
             # 切换手动 / 自动模式。
             if self._button_pressed(msg.buttons, self.button_mode_toggle):

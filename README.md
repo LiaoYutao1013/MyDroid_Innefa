@@ -203,6 +203,41 @@ These are the defaults in `config/visual_following_car.yaml` and can be changed 
 - `B` button: safety stop latch
 - `X` button: re-center gimbal
 
+### Controller Mapping Assistant (recommended for 雷神/other controllers)
+
+If your controller (e.g., 雷神/Thunderobot) uses different axis/button indices, use the built-in mapping assistant to auto-detect and generate a YAML snippet to paste into `config/visual_following_car.yaml`.
+
+1. Launch the teleop node (manual mode) normally, for example:
+
+   ```bash
+   ros2 launch visual_following_car teleop_manual.launch.py
+   ```
+
+2. Enable mapping assistant at runtime:
+
+   ```bash
+   ros2 param set /joy_teleop_node controller_model mapping_assistant
+   ```
+
+   The node will log step-by-step instructions. Follow the prompts:
+   - Move the requested stick/control when prompted to map axes.
+   - Press the requested button when prompted to map buttons.
+
+3. After completion the node prints a YAML snippet. Paste that under `joy_teleop_node.ros__parameters` in `config/visual_following_car.yaml` and restart the node.
+
+4. Alternatively, set `controller_model: mapping_assistant` in the YAML and restart to run detection on startup.
+
+If you prefer manual mapping, you can also inspect raw Joystick messages:
+
+```bash
+# show raw joystick messages
+ros2 topic echo /joy
+# or on Linux use jstest
+jstest /dev/input/js0
+```
+
+Then copy axis/button indices into the YAML keys `axes.*` and `buttons.*`.
+
 ## YOLOv8 Tips for RK3568
 
 - Keep camera resolution at `640x480` or lower for CPU inference.

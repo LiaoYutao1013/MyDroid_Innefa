@@ -42,6 +42,31 @@
 
 这一层是“脑子”，决定怎么追人、怎么转头。
 
+### 手柄映射与雷神（Thunderobot）兼容性
+
+不同品牌游戏手柄的轴/按键索引可能不一致。为方便适配雷神等品牌，系统在 `joy_teleop_node` 中增加了“映射助手”。使用方式：
+
+1. 启动手动遥控节点：
+
+   ```bash
+   ros2 launch visual_following_car teleop_manual.launch.py
+   ```
+
+2. 启用映射助手：
+
+   ```bash
+   ros2 param set /joy_teleop_node controller_model mapping_assistant
+   ```
+
+3. 按日志提示操作：当节点提示“Move the next control”时移动对应摇杆；当提示“Press the next button”时按下对应按键。完成后节点会输出一段 YAML，直接粘回 `config/visual_following_car.yaml` 的 `joy_teleop_node.ros__parameters` 下即可。
+
+4. 调试替代方法：
+
+   - 查看原始消息：`ros2 topic echo /joy`。
+   - Linux 下用 `jstest /dev/input/js0` 查看索引与当前值。
+
+映射助手对新手非常友好：无需事先知道索引，按提示操作即可得到可复制的 YAML 配置片段。
+
 ### 2.3 通信桥接层
 
 - 运行位置：ROCK 3B
