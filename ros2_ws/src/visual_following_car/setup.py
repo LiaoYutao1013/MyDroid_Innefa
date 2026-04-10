@@ -52,6 +52,10 @@ setup(
             'serial_bridge_node = visual_following_car.serial_bridge_node:main',
             'mock_serial_bridge = visual_following_car.mock_serial_bridge:main',
             'screenshot_node = visual_following_car.screenshot_node:main',
+
+            # 蓝牙手柄相关节点 (新增 ★)
+            'bluetooth_gamepad_node = visual_following_car.bluetooth_gamepad_node:main',
+            'detect_gamepad_mapping = visual_following_car.detect_gamepad_mapping:main',
         ],
     },
 )
