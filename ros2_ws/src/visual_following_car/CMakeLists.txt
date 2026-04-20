@@ -10,6 +10,9 @@ project(visual_following_car)
 # 2. 为未来扩展 C++ 节点、原生扩展模块或自定义消息预留入口。
 #
 
-find_package(ament_cmake REQUIRED)
+#find_package(ament_cmake REQUIRED)
+#find_package(ament_cmake_python REQUIRED)
+
+ament_python_install_package(${PROJECT_NAME})
 
 ament_package()
